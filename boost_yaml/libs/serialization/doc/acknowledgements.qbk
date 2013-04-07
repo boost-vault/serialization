@@ -1,0 +1,15 @@
+[/==============================================================================
+    Copyright (C) 2008 Esteve Fernandez
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+
+[section Acknowledgements]
+
+This library was designed by [@esteve.fernandez@gmail.com Esteve Fernandez
+Gonzalez] during the [@http://code.google.com/soc/ Google Summer of Code] 2008
+program under the supervision of
+[@http://www.boost.org/users/people/joel_de_guzman.html Joel de Guzman].
+
+[endsect]

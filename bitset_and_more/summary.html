@@ -1,0 +1,66 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<html>
+  <head>
+    <title>Summary of bitset_and_more</title>
+  </head>
+  <body>
+    <h1>Summary of bitset_and_more</h1>
+      <p>Author: Steven F. McKay,
+         <a href="mailto:Steve.F.McKay@ssa.gov">Steve.F.McKay@ssa.gov</a>,
+         April 11, 2006.</p>
+      <p>The files in this zip file apply to the Boost Library, version 1.33.1.</p>
+      <h2>The problem</h2>
+      <p>The serialization library does not have the ability to
+         serialize a std::bitset. When serializing a std::vector&lt;bool&gt; (a
+         close cousin to a std::bitset), it stores each bit in one byte (in
+         binary mode). As a result, an archive can be much larger than
+         necessary.</p>
+      <h2>The solution</h2>
+      <p>The files in this zip file add the capability to serialize a std::bitset,
+         and the ability to save 8 bits in one byte (in binary mode) for a
+         std::bitset and a std::vector&lt;bool&gt;. Note that there are only 3
+         files that actually implement the changes; the remaining files are
+         documentation.</p>
+      <h2>File-by-file description</h2>
+      <p>The zip file includes the following files:</p>
+      <dl>
+        <dt>summary.html</dt>
+        <dd>This file.</dd>
+        <dt>boost/archive/basic_archive.hpp</dt>
+        <dd>Adds the <code>packed_bools</code> option to <code>archive_flags</code>.
+            This is used in bitset.hpp and vector.hpp (see below).</dd>
+        <dt>boost/libs/serialization/doc/archive_reference.html</dt>
+        <dd>Fixes title, capitalization, punctuation, etc. (unrelated to
+            std::bitsets).</dd>
+        <dt>boost/libs/serialization/doc/archives.html</dt>
+        <dd>Adds documentation for the new <code>packed_bools</code> flag.
+            Also fixes title, capitalization, punctuation, etc.</dd>
+        <dt>boost/libs/serialization/doc/contents.html</dt>
+        <dd>Adds new subheadings for "Binary Archives".</dd>
+        <dt>boost/libs/serialization/doc/overview.html</dt>
+        <dd>Fixes typos, capitalization, and omitted words (unrelated to
+            std::bitsets).</dd>
+        <dt>boost/libs/serialization/doc/reference.html</dt>
+        <dd>Fixes title (unrelated to std::bitsets).</dd>
+        <dt>boost/libs/serialization/doc/serialization.html</dt>
+        <dd>Fixes title, capitalization, punctuation, etc. (unrelated to
+            std::bitsets).</dd>
+        <dt>boost/libs/serialization/doc/special.html</dt>
+        <dd>Adds new subheadings under "Binary Archives", to explain how to
+            pack more bits into bytes. Also fixes typos, etc.</dd>
+        <dt>boost/libs/serialization/doc/strong_typedef.html</dt>
+        <dd>Fixes title, typos, etc. (unrelated to std::bitsets).</dd>
+        <dt>boost/libs/serialization/doc/traits.html</dt>
+        <dd>Fixes title, capitalization, punctuation, etc. (unrelated to
+            std::bitsets).</dd>
+        <dt>boost/serialization/bitset.hpp</dt>
+        <dd>A new file implementing serialization for a std::bitset. It also
+            implements the <code>packed_bools</code> option to pack 8 bits in
+            1 byte.</dd>
+        <dt>boost/serialization/vector.hpp</dt>
+        <dd>Adds the <code>packed_bools</code> option to pack 8 bits in 1 byte,
+            for a std::vector&lt;bool&gt;.</dd>
+      </dl>
+  </body>
+</html>
+

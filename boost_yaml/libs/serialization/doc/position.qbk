@@ -1,0 +1,39 @@
+[/==============================================================================
+    Copyright (C) 2008 Esteve Fernandez
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+
+[section Project position]
+
+[section History of changes]
+
+[section Version 0.1 (August 18th, 2008)]
+
+* Initial public release. This is the result of the work done in the
+  program under  which the YAML archive was developed: [@http://www.google.com/
+  Google]'s [@http://code.google.com/soc/ Summer of Code 2008].
+
+[endsect]
+
+[endsect]
+
+[section Pending work]
+
+In this section, you may find a list of the pending items in the archive
+that should be addressed before it can be included in the official
+Boost.serialization library.
+
+[section Code]
+
+* Implement native YAML collections. This requires some changes to
+  Boost.serialization
+
+* Use class names as class identifier. Same as above.
+
+[endsect]
+
+[endsect]
+
+[endsect]

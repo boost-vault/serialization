@@ -1,0 +1,29 @@
+[/==============================================================================
+    Copyright (C) 2008 Esteve Fernandez
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+
+[section Introduction]
+
+[section Overview]
+
+The YAML archive for Boost.serialization provides a new format for information
+exchange for the Boost.serialization library. The archive tries to follow the
+same style used in the already available archives, so they can be swapped easily.
+
+[endsect]
+
+[section Features]
+
+All the features available found in the standard archives are implemented in
+the YAML archive:
+
+* Primitive types: int, double, char
+* Standard types: string, vector, list, map
+* Complex classes
+
+[endsect]
+
+[endsect]

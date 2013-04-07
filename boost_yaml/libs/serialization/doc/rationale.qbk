@@ -1,0 +1,138 @@
+[/==============================================================================
+    Copyright (C) 2008 Esteve Fernandez
+
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+
+[section Rationale]
+
+[section Overview]
+
+During the development of this project, a series of limitations were found in
+Boost.serialization when implementing other formats. In this section use cases
+for these limitations are presented, along with proposals which address them.
+
+[endsect]
+
+[section Limitations]
+
+[section Class names as class ids]
+
+Currently, Boost.serialization uses integers to serialized class ids.
+Boost.serialization keeps track of the classes that have been serialized,
+however YAML uses class names instead of integers for the same purpose. As an
+example, a simple object (in Python) is serialized as the following YAML
+document:
+
+    !!python/object:module.Example
+    x: 1
+
+where module refers to the namespace and Example to the class name.
+Boost.serialization supports serialization of class names, but only if they
+are part of a class hierarchy. To address this, two macros have been
+implemented:
+
+* BOOST_SERIALIZATION_CNV(class_name, name), which gives enough information
+  to the underlying archive to serialize class names. It is important to note
+  that typeid is not portable across implementations, so it can't be relied
+  upon for determining the class name.
+
+* BOOST_SERIALIZATION_BASE_OBJECT_CNV(base_class_name), which is used for
+  serializing a base class.
+
+These two macros follow the same style as BOOST_SERIALIZATION_NVP and
+BOOST_SERIALIZATION_BASE_OBJECT_NVP, but uses the Boost.Tuple library instead
+of a std::pair.
+
+However, this requires some small changes in the base_oarchive_impl class,
+mainly related to the change from an int to a std::string. For example, in
+basic_oarchive.cpp:315:
+
+        [...]
+        // if its a previously unregistered class
+        if((cobject_info_set.size() > original_count)){
+            if(bos.is_polymorphic()){
+        [...]
+
+which would have to be changed to:
+
+        [...]
+        // if its a previously unregistered class
+        if((cobject_info_set.find(co.class_id) == cobject_info_set.end()){
+            if(bos.is_polymorphic()){
+        [...]
+
+The most important disadvantage of this approach is that it cannot be
+guaranteed that class identifiers are unique. Currently, they're incremented
+sequentally and thus kept unique, but if class_id is changed to a string,
+the programmer may erroneously assign the same identifier to two different
+classes.
+
+[endsect]
+
+[section Collection items]
+
+Boost.serialization provides helpers for standard containers (such as
+std::vector, std::list, etc.), however the code for doing so uses the NVP
+container and thus, it doesn't give the archive enough information to
+distinguish between a collection item and a regular member. For example,
+the code for serializing a vector composed of bool values, found in
+vector.hpp:146:
+
+    template<class Archive, class Allocator>
+    inline void save(
+        Archive & ar,
+        const std::vector<bool, Allocator> &t,
+        const unsigned int /* file_version */
+    ){
+        // record number of elements
+        collection_size_type count (t.size());
+        ar << BOOST_SERIALIZATION_NVP(count);
+        std::vector<bool>::const_iterator it = t.begin();
+        while(count-- > 0){
+            bool tb = *it++;
+            ar << boost::serialization::make_nvp("item", tb);
+        }
+    }
+
+creates an NVP and uses the "item" string as an identifier. As stated before,
+the archive doesn't receive enough information, and collection items are
+treated as regular variables. In the case of YAML, this becomes a problem, since
+a vector containing the values 3 and 4, would be written as:
+
+    v:
+      - 3
+      - 4
+
+but currently it's serialized as:
+
+    v: &id2 !!boost/object:vector
+      count: 2
+      item_version: 0
+      item: 3
+      item: 4
+
+to overcome this, a new structure is proposed (collection_item), which would
+be constructed this way:
+
+    template<class Archive, class U, class Allocator>
+    inline void save(
+        Archive & ar,
+        const std::vector<U, Allocator> &t,
+        const unsigned int /* file_version */
+    ){
+        std::vector<U>::const_iterator it = t.begin();
+        for(;it != t.end();++it) {
+            ar << boost::serialization::make_item(*it);
+        }
+    }
+
+giving the necessary information to the archive, which, in the case of YAML would
+add a leading dash in front of every item.
+
+[endsect]
+
+[endsect]
+
+[endsect]
